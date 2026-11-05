@@ -1,0 +1,135 @@
+district_id,province,district,lat,lon
+BL_Awaran,Balochistan,Awaran,26.424,65.4648
+BL_Barkhan,Balochistan,Barkhan,29.9845,69.6912
+BL_Bolan,Balochistan,Bolan,29.2954,67.7116
+BL_Chagai,Balochistan,Chagai,28.875,63.418
+BL_Dera_Bugti,Balochistan,Dera Bugti,29.0596,69.0112
+BL_Gwadar,Balochistan,Gwadar,25.4253,62.5475
+BL_Harnai,Balochistan,Harnai,30.0416,68.0864
+BL_Jaffarabad,Balochistan,Jaffarabad,28.3043,68.1968
+BL_Jhal_Magsi,Balochistan,Jhal Magsi,28.3699,67.5426
+BL_Kachhi,Balochistan,Kachhi,29.2954,67.7116
+BL_Kalat,Balochistan,Kalat,28.7798,66.3828
+BL_Kharan,Balochistan,Kharan,28.7293,65.4967
+BL_Khuzdar,Balochistan,Khuzdar,27.2938,66.4813
+BL_Killa_Abdullah,Balochistan,Killa Abdullah,30.6987,66.5546
+BL_Killa_Saifullah,Balochistan,Killa Saifullah,31.0534,68.4993
+BL_Kohlu,Balochistan,Kohlu,29.6441,68.8072
+BL_Lasbela,Balochistan,Lasbela,25.7734,66.6034
+BL_Loralai,Balochistan,Loralai,30.3021,69.1038
+BL_Mastung,Balochistan,Mastung,29.7456,66.7305
+BL_Musakhel,Balochistan,Musakhel,30.8971,69.958
+BL_Nasirabad,Balochistan,Nasirabad,28.6264,68.1292
+BL_Nushki,Balochistan,Nushki,29.4468,65.7325
+BL_Panjgur,Balochistan,Panjgur,26.7147,64.2021
+BL_Pishin,Balochistan,Pishin,30.703,67.1308
+BL_Quetta,Balochistan,Quetta,30.1414,67.0774
+BL_Sherani,Balochistan,Sherani,31.6809,69.7636
+BL_Sibi,Balochistan,Sibi,29.4133,67.9972
+BL_Tamboo,Balochistan,Tamboo,28.4931,67.9032
+BL_Turbat,Balochistan,Turbat,26.0079,63.0918
+BL_Washuk,Balochistan,Washuk,27.7921,64.3076
+BL_Zhob,Balochistan,Zhob,31.2118,69.1969
+BL_Ziarat,Balochistan,Ziarat,30.3807,68.0657
+IS_Islamabad,Islamabad,Islamabad,33.6509,72.958
+KP_Abbottabad,Khyber Pakhtunkhwa,Abbottabad,34.0946,73.2911
+KP_Bajaur_Agency,Khyber Pakhtunkhwa,Bajaur Agency,34.7458,71.4857
+KP_Bannu,Khyber Pakhtunkhwa,Bannu,32.985,70.6553
+KP_Battagram,Khyber Pakhtunkhwa,Battagram,34.7618,73.1374
+KP_Buner,Khyber Pakhtunkhwa,Buner,34.4307,72.5563
+KP_Charsadda,Khyber Pakhtunkhwa,Charsadda,34.2479,71.6994
+KP_Chitral,Khyber Pakhtunkhwa,Chitral,36.0581,71.8675
+KP_Dera_Ismail_Khan,Khyber Pakhtunkhwa,Dera Ismail Khan,31.85,70.625
+KP_FR_Bannu,Khyber Pakhtunkhwa,FR Bannu,32.9966,70.4417
+KP_FR_Dera_Ismail_Khan,Khyber Pakhtunkhwa,FR Dera Ismail Khan,31.5327,70.1346
+KP_FR_Kohat,Khyber Pakhtunkhwa,FR Kohat,33.6528,71.6207
+KP_FR_Peshawar,Khyber Pakhtunkhwa,FR Peshawar,33.7537,71.75
+KP_Hangu,Khyber Pakhtunkhwa,Hangu,33.4122,70.8042
+KP_Haripur,Khyber Pakhtunkhwa,Haripur,34.0478,72.8756
+KP_Karak,Khyber Pakhtunkhwa,Karak,33.1013,71.1106
+KP_Khyber_Agency,Khyber Pakhtunkhwa,Khyber Agency,34.04,71.2054
+KP_Kohat,Khyber Pakhtunkhwa,Kohat,33.4122,71.4882
+KP_Kohistan,Khyber Pakhtunkhwa,Kohistan,35.3802,73.2382
+KP_Kurram_Agency,Khyber Pakhtunkhwa,Kurram Agency,33.6896,70.3844
+KP_Lakki_Marwat,Khyber Pakhtunkhwa,Lakki Marwat,32.5703,70.8797
+KP_Lower_Dir,Khyber Pakhtunkhwa,Lower Dir,34.8409,71.8202
+KP_Malakand,Khyber Pakhtunkhwa,Malakand,34.5166,71.8236
+KP_Mansehra,Khyber Pakhtunkhwa,Mansehra,34.6957,73.5119
+KP_Mardan,Khyber Pakhtunkhwa,Mardan,34.3034,72.0808
+KP_Mohmand_Agency,Khyber Pakhtunkhwa,Mohmand Agency,34.4461,71.3665
+KP_North_Waziristan,Khyber Pakhtunkhwa,North Waziristan,32.9571,69.9428
+KP_Nowshera,Khyber Pakhtunkhwa,Nowshera,33.9171,72.0028
+KP_Orakzai_Agency,Khyber Pakhtunkhwa,Orakzai Agency,33.6949,70.8782
+KP_Peshawar,Khyber Pakhtunkhwa,Peshawar,33.9417,71.6
+KP_SD_Hassan_Khel,Khyber Pakhtunkhwa,SD Hassan Khel,33.7537,71.75
+KP_Shangla,Khyber Pakhtunkhwa,Shangla,34.8467,72.7899
+KP_South_Waziristan,Khyber Pakhtunkhwa,South Waziristan,32.2915,69.6775
+KP_Swabi,Khyber Pakhtunkhwa,Swabi,34.1412,72.4768
+KP_Swat,Khyber Pakhtunkhwa,Swat,35.2331,72.5118
+KP_Tank,Khyber Pakhtunkhwa,Tank,32.3187,70.3738
+KP_Torgar,Khyber Pakhtunkhwa,Torgar,34.5586,72.876
+KP_Upper_Dir,Khyber Pakhtunkhwa,Upper Dir,35.3105,72.0482
+PB_Attock,Punjab,Attock,33.5034,72.4251
+PB_Bahawalnagar,Punjab,Bahawalnagar,29.5772,72.9974
+PB_Bahawalpur,Punjab,Bahawalpur,28.8304,71.7667
+PB_Bhakkar,Punjab,Bhakkar,31.6811,71.3379
+PB_Chakwal,Punjab,Chakwal,32.8737,72.5332
+PB_Chiniot,Punjab,Chiniot,31.6698,72.7924
+PB_Dera_Ghazi_Khan,Punjab,Dera Ghazi Khan,30.4803,70.4101
+PB_Faisalabad,Punjab,Faisalabad,31.2311,73.1976
+PB_Gujranwala,Punjab,Gujranwala,32.1884,74.0537
+PB_Gujrat,Punjab,Gujrat,32.718,74.0379
+PB_Hafizabad,Punjab,Hafizabad,32.0511,73.543
+PB_Jhang,Punjab,Jhang,31.1719,72.1417
+PB_Jhelum,Punjab,Jhelum,32.8362,73.3728
+PB_Kasur,Punjab,Kasur,31.0029,74.14
+PB_Khanewal,Punjab,Khanewal,30.3157,72.0651
+PB_Khushab,Punjab,Khushab,32.1249,72.0528
+PB_Kot_Addu,Punjab,Kot Addu,30.4339,71.1417
+PB_Lahore,Punjab,Lahore,31.4863,74.4053
+PB_Layyah,Punjab,Layyah,30.9972,71.284
+PB_Lodhran,Punjab,Lodhran,29.6712,71.7446
+PB_Mandi_Bahauddin,Punjab,Mandi Bahauddin,32.4348,73.4708
+PB_Mianwali,Punjab,Mianwali,32.7043,71.5148
+PB_Multan,Punjab,Multan,29.9259,71.3656
+PB_Murree,Punjab,Murree,33.8714,73.4105
+PB_Muzaffargarh,Punjab,Muzaffargarh,29.8924,71.0128
+PB_Nankana_Sahib,Punjab,Nankana Sahib,31.4322,73.8497
+PB_Narowal,Punjab,Narowal,32.2058,75.0434
+PB_Okara,Punjab,Okara,30.6971,73.7334
+PB_Pakpattan,Punjab,Pakpattan,30.2886,73.307
+PB_Rahim_Yar_Khan,Punjab,Rahim Yar Khan,28.4854,70.4605
+PB_Rajanpur,Punjab,Rajanpur,29.1455,70.1529
+PB_Rawalpindi,Punjab,Rawalpindi,33.5413,73.4381
+PB_Sahiwal,Punjab,Sahiwal,30.5501,72.8961
+PB_Sargodha,Punjab,Sargodha,32.0688,72.7893
+PB_Sheikhupura,Punjab,Sheikhupura,31.714,73.9854
+PB_Sialkot,Punjab,Sialkot,32.4421,74.5683
+PB_Talagang,Punjab,Talagang,32.8489,72.2253
+PB_Taunsa,Punjab,Taunsa,30.9013,70.6123
+PB_Toba_Tek_Singh,Punjab,Toba Tek Singh,30.9286,72.5369
+PB_Vehari,Punjab,Vehari,29.9828,72.3188
+PB_Wazirabad,Punjab,Wazirabad,32.3476,73.9959
+SD_Badin,Sindh,Badin,24.7519,68.8011
+SD_Dadu,Sindh,Dadu,26.7676,67.5052
+SD_Ghotki,Sindh,Ghotki,27.8658,69.6838
+SD_Hyderabad,Sindh,Hyderabad,25.355,68.4444
+SD_Jacobabad,Sindh,Jacobabad,28.1764,68.5143
+SD_Jamshoro,Sindh,Jamshoro,25.7859,67.8522
+SD_Kambar_Shahdadkot,Sindh,Kambar Shahdadkot,27.6466,67.6832
+SD_Karachi,Sindh,Karachi,25.2,67.1578
+SD_Kashmore,Sindh,Kashmore,28.2364,69.1674
+SD_Khairpur,Sindh,Khairpur,26.9596,68.9411
+SD_Larkana,Sindh,Larkana,27.5308,68.2021
+SD_Matiari,Sindh,Matiari,25.7708,68.4217
+SD_Mirpurkhas,Sindh,Mirpurkhas,25.307,69.1597
+SD_Naushahro_Feroze,Sindh,Naushahro Feroze,26.8884,68.0981
+SD_Sanghar,Sindh,Sanghar,25.9792,69.2912
+SD_Shaheed_Benazirabad,Sindh,Shaheed Benazirabad,26.3094,68.2845
+SD_Shikarpur,Sindh,Shikarpur,27.9221,68.5721
+SD_Sukkur,Sindh,Sukkur,27.5453,69.0654
+SD_Tando_Allahyar,Sindh,Tando Allahyar,25.4805,68.7527
+SD_Tando_Muhammad_Khan,Sindh,Tando Muhammad Khan,25.0247,68.4601
+SD_Tharparkar,Sindh,Tharparkar,24.9431,70.241
+SD_Thatta,Sindh,Thatta,24.6155,67.8802
+SD_Umarkot,Sindh,Umarkot,25.3327,69.8114

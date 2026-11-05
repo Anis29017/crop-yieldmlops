@@ -1,0 +1,135 @@
+province,yield_district,rule,hdx_level,hdx_names,hdx_pcodes,check,note
+Balochistan,Awaran,same,adm2,Awaran,PK201,,
+Balochistan,Barkhan,same,adm2,Barkhan,PK202,,
+Balochistan,Bolan,old name,adm2;adm3,Kachhi;Bhag,PK209;PK21801,check,Bolan is the old name of Kachhi (PBS years); Bhag tehsil (now in Lehri) belonged to it
+Balochistan,Chagai,same,adm2,Chagai,PK203,,
+Balochistan,Dera Bugti,same,adm2,Dera Bugti,PK204,,
+Balochistan,Gwadar,same,adm2,Gwadar,PK205,,
+Balochistan,Harnai,same,adm2,Harnai,PK206,,
+Balochistan,Jaffarabad,join several,adm2;adm2,Jaffarabad;Sohbatpur,PK207;PK229,,Sohbatpur split from Jaffarabad in 2013; yield data has no separate Sohbatpur
+Balochistan,Jhal Magsi,same,adm2,Jhal Magsi,PK208,,
+Balochistan,Kachhi,join several,adm2;adm3,Kachhi;Bhag,PK209;PK21801,check,Bhag tehsil moved to the new Lehri district in 2017
+Balochistan,Kalat,join several,adm2;adm2,Kalat;Shaheed Sikandarabad,PK210;PK233,check,Shaheed Sikandarabad (Surab) split from Kalat in 2017
+Balochistan,Kharan,same,adm2,Kharan,PK212,,
+Balochistan,Khuzdar,same,adm2,Khuzdar,PK213,,
+Balochistan,Killa Abdullah,join several,adm2;adm2,Killa Abdullah;Chaman,PK214;PK235,,Chaman split from Killa Abdullah in 2021
+Balochistan,Killa Saifullah,same,adm2,Killa Saifullah,PK215,,
+Balochistan,Kohlu,same,adm2,Kohlu,PK216,,
+Balochistan,Lasbela,same,adm2,Lasbela,PK217,,
+Balochistan,Loralai,join several,adm2;adm2,Loralai;Duki,PK219;PK234,,Duki split from Loralai in 2016
+Balochistan,Mastung,same,adm2,Mastung,PK220,,
+Balochistan,Musakhel,same,adm2,Musakhel,PK221,,
+Balochistan,Nasirabad,same,adm2,Nasirabad,PK222,,
+Balochistan,Nushki,same,adm2,Nushki,PK223,,
+Balochistan,Panjgur,same,adm2,Panjgur,PK224,,
+Balochistan,Pishin,same,adm2,Pishin,PK225,,
+Balochistan,Quetta,same,adm2,Quetta,PK226,,
+Balochistan,Sherani,same,adm2,Sherani,PK227,,
+Balochistan,Sibi,join several,adm2;adm3,Sibi;Lehri,PK228;PK21802,check,Lehri tehsil moved to the new Lehri district in 2017
+Balochistan,Tamboo,old district = tehsil,adm3,Tamboo,PK22203,,Tamboo (PBS 1981-2009) is now a tehsil of Nasirabad
+Balochistan,Turbat,spelling,adm2,Kech,PK211,,Turbat = Kech district
+Balochistan,Washuk,same,adm2,Washuk,PK230,,
+Balochistan,Zhob,same,adm2,Zhob,PK231,,
+Balochistan,Ziarat,same,adm2,Ziarat,PK232,,
+Islamabad,Islamabad,same,adm2,Islamabad,PK401,,
+Khyber Pakhtunkhwa,Abbottabad,same,adm2,Abbottabad,PK501,,
+Khyber Pakhtunkhwa,Bajaur Agency,spelling,adm2,Bajaur,PK502,,
+Khyber Pakhtunkhwa,Bannu,same,adm2,Bannu,PK503,,"Shape includes FR Bannu (Wazir), merged in 2018"
+Khyber Pakhtunkhwa,Battagram,spelling,adm2,Batagram,PK504,,
+Khyber Pakhtunkhwa,Buner,same,adm2,Buner,PK505,,
+Khyber Pakhtunkhwa,Charsadda,same,adm2,Charsadda,PK506,,
+Khyber Pakhtunkhwa,Chitral,join several,adm2;adm2,Chitral Lower;Chitral Upper,PK507;PK508,,Split in 2018; yield data reports Chitral as one
+Khyber Pakhtunkhwa,Dera Ismail Khan,spelling,adm2,D. I. Khan,PK509,,"Shape includes FR Dera Ismail Khan (Darazinda), merged in 2018"
+Khyber Pakhtunkhwa,FR Bannu,frontier region = tehsil,adm3,Wazir,PK50306,,FR Bannu is now Wazir tehsil of Bannu
+Khyber Pakhtunkhwa,FR Dera Ismail Khan,frontier region = tehsil,adm3,Darazinda,PK50906,,FR D.I. Khan is now Darazinda tehsil
+Khyber Pakhtunkhwa,FR Kohat,frontier region = tehsil,adm3,Darra Adam Khel,PK51404,,FR Kohat is now Darra Adam Khel tehsil
+Khyber Pakhtunkhwa,FR Peshawar,frontier region = tehsil,adm3,Hassan Khel,PK52805,,FR Peshawar is now Hassan Khel tehsil
+Khyber Pakhtunkhwa,Hangu,same,adm2,Hangu,PK510,,
+Khyber Pakhtunkhwa,Haripur,same,adm2,Haripur,PK511,,
+Khyber Pakhtunkhwa,Karak,same,adm2,Karak,PK512,,
+Khyber Pakhtunkhwa,Khyber Agency,spelling,adm2,Khyber,PK513,,
+Khyber Pakhtunkhwa,Kohat,same,adm2,Kohat,PK514,,"Shape includes FR Kohat (Darra Adam Khel), merged in 2018"
+Khyber Pakhtunkhwa,Kohistan,join several,adm2;adm2;adm2,Kohistan Lower;Kohistan Upper;Kolai Palas Kohistan,PK515;PK516;PK517,,Split in 2014; yield data reports Kohistan as one
+Khyber Pakhtunkhwa,Kurram Agency,spelling,adm2,Kurram,PK518,,
+Khyber Pakhtunkhwa,Lakki Marwat,same,adm2,Lakki Marwat,PK519,,
+Khyber Pakhtunkhwa,Lower Dir,same,adm2,Lower Dir,PK520,,
+Khyber Pakhtunkhwa,Malakand,same,adm2,Malakand,PK521,,
+Khyber Pakhtunkhwa,Mansehra,same,adm2,Mansehra,PK522,,
+Khyber Pakhtunkhwa,Mardan,same,adm2,Mardan,PK523,,
+Khyber Pakhtunkhwa,Mohmand Agency,spelling,adm2,Mohmand,PK524,,
+Khyber Pakhtunkhwa,North Waziristan,same,adm2,North Waziristan,PK525,,
+Khyber Pakhtunkhwa,Nowshera,same,adm2,Nowshera,PK526,,
+Khyber Pakhtunkhwa,Orakzai Agency,spelling,adm2,Orakzai,PK527,,
+Khyber Pakhtunkhwa,Peshawar,same,adm2,Peshawar,PK528,,"Shape includes FR Peshawar / SD Hassan Khel, merged in 2018"
+Khyber Pakhtunkhwa,SD Hassan Khel,frontier region = tehsil,adm3,Hassan Khel,PK52805,,Same area as FR Peshawar (Hassan Khel sub-division)
+Khyber Pakhtunkhwa,Shangla,same,adm2,Shangla,PK529,,
+Khyber Pakhtunkhwa,South Waziristan,same,adm2,South Waziristan,PK530,,
+Khyber Pakhtunkhwa,Swabi,same,adm2,Swabi,PK531,,
+Khyber Pakhtunkhwa,Swat,same,adm2,Swat,PK532,,
+Khyber Pakhtunkhwa,Tank,same,adm2,Tank,PK533,,
+Khyber Pakhtunkhwa,Torgar,spelling,adm2,Tor Ghar,PK534,,
+Khyber Pakhtunkhwa,Upper Dir,same,adm2,Upper Dir,PK535,,
+Punjab,Attock,same,adm2,Attock,PK601,,
+Punjab,Bahawalnagar,same,adm2,Bahawalnagar,PK602,,
+Punjab,Bahawalpur,same,adm2,Bahawalpur,PK603,,
+Punjab,Bhakkar,same,adm2,Bhakkar,PK604,,
+Punjab,Chakwal,same,adm2,Chakwal,PK605,,
+Punjab,Chiniot,same,adm2,Chiniot,PK606,,
+Punjab,Dera Ghazi Khan,same,adm2,Dera Ghazi Khan,PK607,,
+Punjab,Faisalabad,same,adm2,Faisalabad,PK608,,
+Punjab,Gujranwala,same,adm2,Gujranwala,PK609,,
+Punjab,Gujrat,same,adm2,Gujrat,PK610,,
+Punjab,Hafizabad,same,adm2,Hafizabad,PK611,,
+Punjab,Jhang,same,adm2,Jhang,PK612,,
+Punjab,Jhelum,same,adm2,Jhelum,PK613,,
+Punjab,Kasur,same,adm2,Kasur,PK614,,
+Punjab,Khanewal,same,adm2,Khanewal,PK615,,
+Punjab,Khushab,same,adm2,Khushab,PK616,,
+Punjab,Kot Addu,new district = old tehsil,adm3,Kot Addu,PK62303,,District since 2024; shape = Kot Addu tehsil (parent Muzaffargarh shape still includes it)
+Punjab,Lahore,same,adm2,Lahore,PK617,,
+Punjab,Layyah,spelling,adm2,Leiah,PK618,,
+Punjab,Lodhran,same,adm2,Lodhran,PK619,,
+Punjab,Mandi Bahauddin,same,adm2,Mandi Bahauddin,PK620,,
+Punjab,Mianwali,same,adm2,Mianwali,PK621,,
+Punjab,Multan,same,adm2,Multan,PK622,,
+Punjab,Murree,new district = old tehsil,adm3,Murree,PK63005,,District since 2024; shape = Murree tehsil (parent Rawalpindi still includes it)
+Punjab,Muzaffargarh,same,adm2,Muzaffargarh,PK623,,
+Punjab,Nankana Sahib,same,adm2,Nankana Sahib,PK624,,
+Punjab,Narowal,same,adm2,Narowal,PK625,,
+Punjab,Okara,same,adm2,Okara,PK626,,
+Punjab,Pakpattan,same,adm2,Pakpattan,PK627,,
+Punjab,Rahim Yar Khan,same,adm2,Rahim Yar Khan,PK628,,
+Punjab,Rajanpur,same,adm2,Rajanpur,PK629,,
+Punjab,Rawalpindi,same,adm2,Rawalpindi,PK630,,
+Punjab,Sahiwal,same,adm2,Sahiwal,PK631,,
+Punjab,Sargodha,same,adm2,Sargodha,PK632,,
+Punjab,Sheikhupura,same,adm2,Sheikhupura,PK633,,
+Punjab,Sialkot,same,adm2,Sialkot,PK634,,
+Punjab,Talagang,new district = old tehsil,adm3,Tala Gang,PK60504,,District since 2024; shape = Tala Gang tehsil (parent Chakwal still includes it)
+Punjab,Taunsa,new district = old tehsil,adm3,Taunsa,PK60704,,District since 2024; shape = Taunsa tehsil (parent Dera Ghazi Khan still includes it)
+Punjab,Toba Tek Singh,same,adm2,Toba Tek Singh,PK635,,
+Punjab,Vehari,same,adm2,Vehari,PK636,,
+Punjab,Wazirabad,new district = old tehsil,adm3,Wazirabad,PK60904,,District since 2024; shape = Wazirabad tehsil (parent Gujranwala still includes it)
+Sindh,Badin,same,adm2,Badin,PK701,,
+Sindh,Dadu,same,adm2,Dadu,PK703,,
+Sindh,Ghotki,same,adm2,Ghotki,PK705,,
+Sindh,Hyderabad,same,adm2,Hyderabad,PK706,,
+Sindh,Jacobabad,same,adm2,Jacobabad,PK707,,
+Sindh,Jamshoro,same,adm2,Jamshoro,PK708,,
+Sindh,Kambar Shahdadkot,spelling,adm2,Kambar Shahdad Kot,PK709,,
+Sindh,Karachi,join several,adm2;adm2;adm2;adm2;adm2;adm2,Central Karachi;East Karachi;Korangi Karachi;Malir Karachi;South Karachi;West Karachi,PK702;PK704;PK712;PK714;PK721;PK729,,Yield data reports Karachi as one district
+Sindh,Kashmore,same,adm2,Kashmore,PK710,,
+Sindh,Khairpur,same,adm2,Khairpur,PK711,,
+Sindh,Larkana,same,adm2,Larkana,PK713,,
+Sindh,Matiari,same,adm2,Matiari,PK715,,
+Sindh,Mirpurkhas,spelling,adm2,Mirpur Khas,PK716,,
+Sindh,Naushahro Feroze,same,adm2,Naushahro Feroze,PK717,,
+Sindh,Sanghar,same,adm2,Sanghar,PK718,,
+Sindh,Shaheed Benazirabad,spelling,adm2,Shaheed Benazir Abad,PK719,,Formerly Nawabshah
+Sindh,Shikarpur,same,adm2,Shikarpur,PK720,,
+Sindh,Sukkur,same,adm2,Sukkur,PK723,,
+Sindh,Tando Allahyar,same,adm2,Tando Allahyar,PK724,,
+Sindh,Tando Muhammad Khan,same,adm2,Tando Muhammad Khan,PK725,,
+Sindh,Tharparkar,same,adm2,Tharparkar,PK726,,
+Sindh,Thatta,join several,adm2;adm2,Thatta;Sujawal,PK727;PK722,check,Sujawal split from Thatta in 2013; yield data keeps reporting Thatta as one
+Sindh,Umarkot,spelling,adm2,Umer Kot,PK728,,
