@@ -22,7 +22,7 @@ flowchart LR
 
 ```
 git clone https://github.com/Anis29017/crop-yield-mlops.git
-cd crop-yield-mlops
+cd crop-yieldmlops
 python3 -m venv venv
 source venv/bin/activate            # Windows: venv\Scripts\activate
 pip install -r requirements.txt
