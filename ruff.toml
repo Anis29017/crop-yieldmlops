@@ -1,0 +1,7 @@
+# Lint settings used locally and in CI (ruff check src/ tests/)
+line-length = 120
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "I"]   # pycodestyle errors, pyflakes, import order
+ignore = ["E501"]          # long lines (data notes, long URLs)

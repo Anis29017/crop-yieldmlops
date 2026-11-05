@@ -1,0 +1,24 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+.DS_Store
+
+# MLflow / models (re-created by training)
+mlruns/
+mlflow.db
+models/
+*.pkl
+
+# Large downloaded caches (re-created by the fetch scripts)
+data/raw/nasa_power/
+data/raw/chirps/
+data/raw/soilgrids/
+data/raw/hdx/
+data/interim/power_daily.csv
+
+# Kept in git on purpose: data/raw/Pakistan_Master_Yield_1981-2025.xlsx,
+# data/raw/district_name_table.csv and the small files in data/interim/
