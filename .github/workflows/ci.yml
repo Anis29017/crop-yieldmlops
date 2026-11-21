@@ -1,21 +1,84 @@
 name: CI
 
+# Runs on every push to main and on every pull request.
 on:
   push:
     branches: [main]
   pull_request:
 
 jobs:
-  lint-and-test:
+  # 1. Code style and errors (ruff), using the version pinned in requirements.txt.
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install ruff
+        run: pip install "$(grep '^ruff==' requirements.txt)"
       - name: Lint
         run: ruff check src/ tests/
-      - name: Unit tests (offline; tests that need a trained model are skipped)
+
+  # 2. Build the training data from the real files, train the model, then run all tests
+  #    (with a model present, the model and /predict tests run instead of being skipped).
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build training data from the real inputs
+        run: |
+          python -m src.build_yield_labels
+          python -m src.build_master
+          python -m src.prepare_data
+      - name: Train the model
+        run: python -m src.train
+      - name: Check the model file exists
+        run: test -f models/model.pkl
+      - name: Unit tests
         run: pytest tests/ -v
+
+  # 3. Build the Docker image (only if lint and test passed), start it, and check the
+  #    healthcheck, /health, /predict and /stats work inside the container.
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t crop-yield:${{ github.sha }} .
+      - name: Start the container
+        run: docker run -d --name api -p 8000:8000 crop-yield:${{ github.sha }}
+      - name: Wait until Docker reports it healthy
+        run: |
+          for i in $(seq 1 30); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' api)
+            echo "health: $status"
+            if [ "$status" = "healthy" ]; then exit 0; fi
+            sleep 5
+          done
+          docker logs api
+          exit 1
+      - name: Call /health, /predict and /stats
+        run: |
+          curl -fsS http://localhost:8000/health
+          echo
+          curl -fsS -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"district": "Faisalabad", "province": "Punjab", "crop": "wheat", "year": 2025,
+                 "season_tmax_mean": 29.57, "season_rain_mm": 63.93, "heat_days_40c": 22,
+                 "rain_anomaly": -19.59, "soil_ph": 8.02, "soil_oc": 7.18, "soil_clay": 20.99,
+                 "soil_sand": 34.26, "soil_nitrogen": 0.73,
+                 "prev_yield": 3.764, "prev2_yield": 3.659, "prev3_yield": 3.276}'
+          echo
+          curl -fsS http://localhost:8000/stats
+          echo
+      - name: Container logs
+        if: always()
+        run: docker logs api
