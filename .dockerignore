@@ -1,0 +1,29 @@
+# Keep the build context small and free of local results.
+.git
+.github
+venv
+.venv
+**/__pycache__
+.pytest_cache
+.ruff_cache
+.DS_Store
+
+# Local training results: the image trains its own model during the build.
+mlruns
+mlflow.db
+models
+
+# Files the build recreates from the real inputs.
+data/raw/master.csv
+data/raw/yield_labels.csv
+data/processed.csv
+data/processed_sample.csv
+
+# Large download caches (not needed to build or run the API).
+data/raw/nasa_power
+data/raw/chirps
+data/raw/soilgrids
+data/raw/hdx
+data/interim/power_daily.csv
+data/interim/chirps_monthly.csv
+data/interim/districts.gpkg
