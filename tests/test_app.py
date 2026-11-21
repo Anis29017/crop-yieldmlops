@@ -223,3 +223,9 @@ def test_predict_latency_reports_single_row_and_batch_speed():
     out = predict_latency(lambda X: X["prev_yield"].to_numpy(), df)
     assert out["latency_single_row_ms"] > 0
     assert out["latency_ms_per_1k_rows"] > 0
+
+
+def test_root_redirects_to_docs():
+    r = client.get("/", follow_redirects=False)
+    assert r.status_code in (302, 307)
+    assert r.headers["location"] == "/docs"

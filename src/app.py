@@ -19,6 +19,7 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 from src.prepare_data import FEATURES, add_derived
@@ -124,6 +125,12 @@ class YieldOutput(BaseModel):
     crop: str
     year: int
     predicted_yield_t_ha: float
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    """The bare address opens the interactive docs instead of 'Not Found'."""
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")
