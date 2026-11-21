@@ -5,7 +5,8 @@ yield labels -> merge -> prepare data -> train -> tests.
 
 Steps 1-5 (districts, NASA POWER, CHIRPS, SoilGrids, climate features) download
 data and are run separately; see the README. This script uses their outputs in
-data/interim/. If those are missing, prepare_data falls back to synthetic data.
+data/interim/. If any input is missing, it stops with an error: no data is
+generated or substituted.
 """
 
 import os
@@ -27,12 +28,9 @@ NEEDED = [
 def main():
     missing = [p for p in NEEDED if not os.path.exists(p)]
     if missing:
-        print(
-            f"WARNING: missing {missing}; using whatever data/raw/master.csv exists (or synthetic data)"
-        )
-    else:
-        build_yield_labels.main()
-        build_master.main()
+        raise FileNotFoundError(f"Missing input files: {missing}. They must come from the real data sources (see README).")
+    build_yield_labels.main()
+    build_master.main()
     prepare_data()
     summary = train()
     code = subprocess.call([sys.executable, "-m", "pytest", "tests/", "-q"])
