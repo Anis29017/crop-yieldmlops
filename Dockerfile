@@ -11,10 +11,18 @@
 # (the same version the GitHub Actions CI uses).
 FROM python:3.12-slim
 
+# OMP_NUM_THREADS=1: XGBoost/LightGBM start one thread per CPU they can see. On shared
+# build machines (Render) that many threads fight over a small CPU share and made the
+# build take over an hour; one thread gives the same results in seconds on this data.
+# GIT_PYTHON_REFRESH=quiet: the image has no git, so MLflow cannot record the commit;
+# this only silences that warning.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    PORT=8000
+    PORT=8000 \
+    OMP_NUM_THREADS=1 \
+    LOKY_MAX_CPU_COUNT=1 \
+    GIT_PYTHON_REFRESH=quiet
 
 # LightGBM and XGBoost need the OpenMP library, which the slim image lacks.
 RUN apt-get update \
