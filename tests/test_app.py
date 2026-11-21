@@ -174,3 +174,52 @@ def test_predict_rejects_short_province_name():
 def test_predict_missing_field():
     bad = {k: v for k, v in VALID_INPUT.items() if k != "prev3_yield"}
     assert client.post("/predict", json=bad).status_code == 422
+
+
+# ---------- monitoring ----------
+
+
+def test_stats_counts_requests_and_reports_latency():
+    before = client.get("/stats").json()
+    client.get("/health")
+    client.get("/health")
+    client.post("/predict", json={**VALID_INPUT, "crop": "banana"})  # rejected (422) but still counted
+    after = client.get("/stats").json()
+    # the 3 calls above plus the first /stats call
+    assert after["total_requests"] - before["total_requests"] == 4
+    assert after["average_latency_ms"] > 0
+    health = after["endpoints"]["/health"]
+    assert health["count"] >= 2
+    assert 0 < health["average_latency_ms"] <= health["max_latency_ms"]
+    assert health["p95_latency_ms"] <= health["max_latency_ms"]
+    assert after["status_codes"]["4xx"] >= 1
+    assert after["uptime_seconds"] >= 0
+
+
+def test_every_response_carries_its_latency():
+    r = client.get("/health")
+    assert float(r.headers["X-Latency-ms"]) > 0
+
+
+def test_unknown_paths_are_grouped_as_other():
+    client.get("/no-such-page")
+    endpoints = client.get("/stats").json()["endpoints"]
+    assert "other" in endpoints and "/no-such-page" not in endpoints
+
+
+@pytest.mark.skipif(not os.path.exists("models/model.pkl"), reason="run train.py first")
+def test_stats_tracks_model_latency():
+    before = client.get("/stats").json()["model"]["predictions"]
+    assert client.post("/predict", json=VALID_INPUT).status_code == 200
+    model = client.get("/stats").json()["model"]
+    assert model["predictions"] == before + 1
+    assert model["average_model_latency_ms"] > 0
+
+
+def test_predict_latency_reports_single_row_and_batch_speed():
+    from src.train import predict_latency
+
+    df = _real_rows()
+    out = predict_latency(lambda X: X["prev_yield"].to_numpy(), df)
+    assert out["latency_single_row_ms"] > 0
+    assert out["latency_ms_per_1k_rows"] > 0

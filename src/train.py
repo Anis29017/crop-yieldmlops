@@ -12,12 +12,17 @@
   (RMSE for that crop / mean yield of that crop).
 - Saves the best model as models/model_v<N>_<type>.pkl (N = MLflow registry
   version) plus models/model.pkl (the copy the API loads), and registers it.
+- Latency: every run also logs how long it takes to predict - one row at a time
+  (what the API does per request) and per 1,000 rows - plus the training time,
+  so models can be compared on speed as well as accuracy. Speed is reported,
+  not used to choose the model.
 """
 
 import json
 import os
 import pickle
 import shutil
+import time
 import warnings
 
 import mlflow
@@ -194,6 +199,29 @@ CANDIDATES = [
     ),
 ]
 
+LATENCY_ROWS = 50  # single-row predictions timed per run (the median is logged)
+
+
+def predict_latency(predict, X):
+    """Prediction speed on the validation rows.
+
+    latency_single_row_ms: median time to predict ONE row, like one API request.
+    latency_ms_per_1k_rows: time to predict all rows at once, per 1,000 rows.
+    """
+    start = time.perf_counter()
+    predict(X)
+    batch_ms = (time.perf_counter() - start) * 1000
+    singles = []
+    for i in range(min(LATENCY_ROWS, len(X))):
+        start = time.perf_counter()
+        predict(X.iloc[[i]])
+        singles.append((time.perf_counter() - start) * 1000)
+    return {
+        "latency_single_row_ms": float(np.median(singles)),
+        "latency_ms_per_1k_rows": batch_ms / len(X) * 1000,
+    }
+
+
 BASELINES = {
     "baseline_last_year": lambda d: d["prev_yield"].to_numpy(dtype=float),
     "baseline_3yr_average": recent_average,
@@ -208,6 +236,7 @@ def log_baselines(val, test):
             mlflow.log_param("model_type", name)
             m = metrics(val[TARGET], forecast(val), val["crop"])
             m.update(metrics(test[TARGET], forecast(test), test["crop"], prefix="test"))
+            m.update(predict_latency(forecast, val))
             mlflow.log_metrics(m)
             print(
                 f"{name:22s} val_score={m['val_score']:.4f}  test_score={m['test_score']:.4f}"
@@ -227,14 +256,21 @@ def train_one(name, cls, params, train, val):
         mlflow.log_param("model_type", name)
         mlflow.log_param("target", "log(yield / mean of previous 3 years)")
         mlflow.log_params(params)
+        start = time.perf_counter()
         model.fit(train[FEATURES], train[TARGET])
+        fit_seconds = time.perf_counter() - start
         m = metrics(val[TARGET], model.predict(val[FEATURES]), val["crop"])
+        m.update(predict_latency(model.predict, val[FEATURES]))
+        m["fit_seconds"] = fit_seconds
         mlflow.log_metrics(m)
         # cloudpickle: we trained this model ourselves, so it is a trusted source
         info = mlflow.sklearn.log_model(
             model, name="model", serialization_format="cloudpickle"
         )
-        print(f"{name:14s} {params}  val_score={m['val_score']:.4f}")
+        print(
+            f"{name:14s} {params}  val_score={m['val_score']:.4f}  "
+            f"latency={m['latency_single_row_ms']:.2f}ms/row  fit={fit_seconds:.1f}s"
+        )
         return model, m, run.info.run_id, info.model_uri
 
 
