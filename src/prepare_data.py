@@ -1,8 +1,8 @@
 """Step 8 - Data preparation (separate from training, as required for M1).
 
 Reads the merged master table (district x crop x year) made by
-src/build_master.py. If it does not exist yet, a synthetic placeholder with
-the SAME columns is generated so training, the API and tests can still run.
+src/build_master.py. If that file does not exist, the script stops with an
+error: it never generates or substitutes data.
 
 Cleaning (each step prints how many rows it removed and why):
   1. rows with any missing feature or target (e.g. the first 3 years of a series
@@ -15,7 +15,6 @@ Output: data/processed.csv
 
 import os
 
-import numpy as np
 import pandas as pd
 
 RAW_PATH = "data/raw/master.csv"
@@ -55,63 +54,6 @@ YIELD_BOUNDS = {
     "rice": (0.3, 6.0),
     "sugarcane": (10.0, 120.0),
 }
-
-# Typical mean yields (t/ha), used only by the synthetic generator.
-_BASE_YIELD = {"wheat": 3.0, "cotton": 0.8, "rice": 2.5, "sugarcane": 60.0}
-
-
-def make_synthetic(n_districts=40, start_year=2000, end_year=2023, seed=42):
-    """Synthetic placeholder with the real columns. Includes a 2010 and 2022
-    flood shock so the drift experiment in M2 has something to detect."""
-    rng = np.random.default_rng(seed)
-    rows = []
-    for d in range(n_districts):
-        province = PROVINCES[d % 4]
-        soil = {
-            "soil_ph": rng.uniform(7.5, 8.6),
-            "soil_oc": rng.uniform(2.0, 9.0),
-            "soil_clay": rng.uniform(10, 40),
-            "soil_sand": rng.uniform(20, 60),
-            "soil_nitrogen": rng.uniform(0.3, 1.2),
-        }
-        for crop in CROPS:
-            prev = prev2 = prev3 = _BASE_YIELD[crop]
-            for year in range(start_year, end_year + 1):
-                shock = year in (2010, 2022)
-                tmax = (
-                    rng.normal(34, 1.5) + (year - start_year) * 0.02
-                )  # slow warming, in C
-                rain = rng.normal(250, 60) + (400 if shock else 0)
-                heat = max(0, int(rng.normal(12, 4) + (year - start_year) * 0.2))
-                effect = (
-                    1
-                    - 0.01 * heat
-                    - (0.35 if shock else 0)
-                    + 0.02 * soil["soil_oc"] / 9
-                    + rng.normal(0, 0.05)
-                )
-                yld = max(_BASE_YIELD[crop] * effect, YIELD_BOUNDS[crop][0] + 0.01)
-                rows.append(
-                    {
-                        "district_id": f"SYN_{d:02d}",
-                        "district": f"district_{d:02d}",
-                        "province": province,
-                        "crop": crop,
-                        "year": year,
-                        "season_tmax_mean": round(tmax, 2),
-                        "season_rain_mm": round(max(rain, 0), 1),
-                        "heat_days_40c": heat,
-                        "rain_anomaly": round(rain - 250, 1),
-                        **{k: round(v, 3) for k, v in soil.items()},
-                        "prev_yield": round(prev, 3),
-                        "prev2_yield": round(prev2, 3),
-                        "prev3_yield": round(prev3, 3),
-                        TARGET: round(yld, 3),
-                    }
-                )
-                prev3, prev2, prev = prev2, prev, yld
-    return add_derived(pd.DataFrame(rows))
-
 
 def add_derived(df):
     """Columns computed from others. Used by prepare_data AND the API, so both match."""
@@ -175,13 +117,14 @@ def validate(df):
 
 
 def prepare_data(raw_path=RAW_PATH, out_path=OUT_PATH):
-    if os.path.exists(raw_path):
-        df = pd.read_csv(raw_path)
-        source = raw_path
-    else:
-        df = make_synthetic()
-        source = "SYNTHETIC placeholder (run build_yield_labels + build_master for real data)"
-    print(f"Read {len(df)} rows from {source}")
+    if not os.path.exists(raw_path):
+        raise FileNotFoundError(
+            f"{raw_path} not found. Build it from the real data first: "
+            "python -m src.build_yield_labels && python -m src.build_master "
+            "(or run everything with python -m src.run_pipeline)."
+        )
+    df = pd.read_csv(raw_path)
+    print(f"Read {len(df)} rows from {raw_path}")
     df = drop_implausible(drop_incomplete(add_derived(df)))[REQUIRED_COLS]
     validate(df)
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)

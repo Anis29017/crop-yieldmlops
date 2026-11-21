@@ -14,7 +14,6 @@ from src.prepare_data import (
     TARGET,
     add_derived,
     drop_missing_prev_yield,
-    make_synthetic,
     prepare_data,
     validate,
 )
@@ -41,13 +40,30 @@ VALID_INPUT = {
 
 client = TestClient(app)
 
+REAL_DATA = "data/processed.csv"  # real prepared rows, committed to the repo
+
+
+def _real_rows():
+    """Real rows for two districts (all 4 crops, 1984-2025). Tests never use made-up yields."""
+    df = pd.read_csv(REAL_DATA)
+    return df[df["district_id"].isin(["PB_Faisalabad", "SD_Hyderabad"])].reset_index(drop=True)
+
 
 # ---------- data preparation ----------
 
 
-def test_prepare_data(tmp_path):
+def test_prepare_data_stops_when_master_is_missing(tmp_path):
+    """No real input -> an error, never a made-up dataset."""
+    with pytest.raises(FileNotFoundError):
+        prepare_data(raw_path=str(tmp_path / "missing.csv"), out_path=str(tmp_path / "out.csv"))
+    assert not (tmp_path / "out.csv").exists()
+
+
+def test_prepare_data_on_real_rows(tmp_path):
+    raw = tmp_path / "master.csv"
+    _real_rows().drop(columns="trend_ratio").to_csv(raw, index=False)
     out = tmp_path / "processed.csv"
-    prepare_data(raw_path=str(tmp_path / "missing.csv"), out_path=str(out))
+    prepare_data(raw_path=str(raw), out_path=str(out))
     df = pd.read_csv(out)
     assert len(df) > 0
     assert df.isnull().sum().sum() == 0
@@ -55,28 +71,28 @@ def test_prepare_data(tmp_path):
 
 
 def test_validate_rejects_missing_values():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     df.loc[0, "soil_ph"] = None
     with pytest.raises(AssertionError, match="Missing values"):
         validate(df)
 
 
 def test_validate_rejects_duplicate_rows():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     df = pd.concat([df, df.iloc[[0]]])
     with pytest.raises(AssertionError, match="Duplicate"):
         validate(df)
 
 
 def test_validate_rejects_implausible_yield():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     df.loc[df["crop"] == "wheat", TARGET] = 50.0  # wheat cannot be 50 t/ha
     with pytest.raises(AssertionError, match="wheat"):
         validate(df)
 
 
 def test_time_split_has_no_future_leakage():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     train, val = split(df)
     assert train["year"].max() <= 2017
     assert val["year"].min() >= 2018 and val["year"].max() <= 2020
@@ -84,7 +100,7 @@ def test_time_split_has_no_future_leakage():
 
 
 def test_first_year_rows_without_prev_yield_are_dropped():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     df.loc[[0, 1], "prev_yield"] = None
     out = drop_missing_prev_yield(df)
     assert len(out) == len(df) - 2
@@ -96,7 +112,7 @@ def test_wrapper_returns_recent_average_when_change_is_zero():
     """With a model that always predicts 'no change', the forecast is the 3-year average."""
     from sklearn.dummy import DummyRegressor
 
-    df = add_derived(make_synthetic(n_districts=2))
+    df = _real_rows()
     m = RecentYieldRatioRegressor(
         DummyRegressor(strategy="constant", constant=0.0)
     ).fit(df[FEATURES], df[TARGET])
@@ -105,7 +121,7 @@ def test_wrapper_returns_recent_average_when_change_is_zero():
 
 
 def test_metrics_include_per_crop_rmse():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     m = metrics(df[TARGET], df["prev_yield"], df["crop"])
     assert {"val_rmse", "val_rmse_wheat", "val_rmse_sugarcane"} <= set(m)
 

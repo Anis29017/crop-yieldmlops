@@ -1,4 +1,8 @@
-"""Tests for the yield-label, merge and cleaning steps (offline, small made-up tables)."""
+"""Tests for the yield-label, merge and cleaning steps.
+
+The join tests use tiny hand-written tables (two fake district IDs) only to check
+the join logic itself; the cleaning tests use real rows from data/processed.csv.
+"""
 
 import pandas as pd
 import pytest
@@ -10,9 +14,16 @@ from src.prepare_data import (
     REQUIRED_COLS,
     drop_implausible,
     drop_incomplete,
-    make_synthetic,
     validate,
 )
+
+REAL_DATA = "data/processed.csv"  # real prepared rows, committed to the repo
+
+
+def _real_rows():
+    df = pd.read_csv(REAL_DATA)
+    return df[df["district_id"].isin(["PB_Faisalabad", "SD_Hyderabad"])].reset_index(drop=True)
+
 
 POINTS = pd.DataFrame(
     {
@@ -113,7 +124,7 @@ def test_build_master_joins_weather_and_soil():
 
 
 def test_drop_incomplete_and_implausible():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     df.loc[df.index[df.crop == "cotton"][0], "prev_yield"] = None  # 1 incomplete row
     df.loc[df.index[df.crop == "wheat"][:3], "yield_t_ha"] = (
         50.0  # 3 impossible wheat yields
@@ -124,7 +135,7 @@ def test_drop_incomplete_and_implausible():
 
 
 def test_validate_rejects_unknown_province():
-    df = make_synthetic(n_districts=2)
+    df = _real_rows()
     df.loc[0, "province"] = "KP"  # must be the full name
     with pytest.raises(AssertionError, match="province"):
         validate(df)
