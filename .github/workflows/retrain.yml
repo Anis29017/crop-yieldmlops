@@ -1,0 +1,57 @@
+name: Annual Model Retraining
+
+on:
+  schedule:
+    # Runs annually on May 1 at 00:00 UTC (after Rabi wheat harvest statistics are published)
+    - cron: "0 0 1 5 *"
+  workflow_dispatch:
+    inputs:
+      check_drift_only:
+        description: "Skip retraining unless drift is detected (true/false)"
+        required: false
+        default: "false"
+      drift_year:
+        description: "Year slice to evaluate for climate drift"
+        required: false
+        default: "2022"
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run drift check (2022 flood benchmark)
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python -m src.drift --year "${{ github.event.inputs.drift_year || '2022' }}"
+
+      - name: Run retraining and promotion gate
+        run: |
+          if [ "${{ github.event.inputs.check_drift_only }}" = "true" ]; then
+            python -m src.retrain --check-drift --drift-year "${{ github.event.inputs.drift_year || '2022' }}"
+          else
+            python -m src.retrain --force
+          fi
+
+      - name: Upload drift and retraining artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrain-reports
+          path: |
+            models/drift_report.json
+            models/best_run.json
+          if-no-files-found: ignore
