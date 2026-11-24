@@ -76,7 +76,7 @@ jobs:
         with:
           add-paths: |
             data/sources/manifest.csv
-            data/sources/new_yields/*.csv
+            data/sources/new_yields
             data/interim/climate_features.csv
             data/processed.csv
             data/DATA_VERSIONS.csv
