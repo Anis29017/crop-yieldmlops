@@ -1,11 +1,19 @@
 name: Fetch source data
 
-# DataOps: check the official source pages for new yield books.
+# DataOps: keep the training data up to date, with a person approving every change.
 # - Monthly, and on demand from the Actions tab ("Run workflow").
 # - First run: tick "init" to record every book listed today as known (no downloads).
-# - When new books are found: they are downloaded, checked, read into one Excel file per book
-#   (src/dataops/read_books.py), uploaded as an artifact, and a pull request updates
-#   data/sources/manifest.csv for a person to review (its text lists every check of every book).
+# Each run:
+#   1. checks the official pages for new yield books and downloads them (src/dataops/fetch.py);
+#   2. reads each book into an Excel file with all its checks (src/dataops/read_books.py); a book
+#      that passes every check also gets its rows as data/sources/new_yields/<book>.csv;
+#   3. adds the newest finished crop seasons to data/interim/climate_features.csv
+#      (NASA POWER + CHIRPS, src/update_climate.py);
+#   4. rebuilds the training table (data/processed.csv) and, if it changed, records the new
+#      data version in data/DATA_VERSIONS.csv (src/data_version.py);
+#   5. opens ONE pull request with whatever changed, its text listing every check.
+# Nothing reaches the model until a person reviews and merges that pull request; merging
+# then rebuilds the service (Render), which retrains the model on the new data.
 on:
   schedule:
     - cron: "0 3 1 * *"   # 03:00 UTC on the 1st of every month
@@ -30,10 +38,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install what the fetcher and the book readers need (versions from requirements.txt)
+          cache: pip
+      - name: Install dependencies (tesseract is the OCR program for the scanned Sindh book)
         run: |
           sudo apt-get update && sudo apt-get install -y tesseract-ocr
-          for p in requests pandas openpyxl pdfplumber pytesseract; do pip install "$(grep "^$p==" requirements.txt)"; done
+          pip install -r requirements.txt
       - name: Check the source pages and download new books
         run: |
           if [ "${{ inputs.init }}" = "true" ]; then
@@ -41,9 +50,19 @@ jobs:
           else
             python -m src.dataops.fetch
           fi
-      - name: Read the new books into Excel files
+      - name: Read the new books (Excel per book; rows of books that pass every check -> data/sources/new_yields)
         if: ${{ !inputs.init }}
-        run: python -m src.dataops.read_books "$SOURCES_DOWNLOAD_DIR"
+        run: python -m src.dataops.read_books "$SOURCES_DOWNLOAD_DIR" --accept data/sources/new_yields
+      - name: Add the newest finished seasons to the climate table
+        if: ${{ !inputs.init }}
+        run: python -m src.update_climate --report "$SOURCES_DOWNLOAD_DIR/report.md"
+      - name: Rebuild the training table and record the data version if it changed
+        if: ${{ !inputs.init }}
+        run: |
+          python -m src.build_yield_labels
+          python -m src.build_master
+          python -m src.prepare_data
+          python -m src.data_version --record "DataOps run ${{ github.run_number }}" --report "$SOURCES_DOWNLOAD_DIR/report.md"
       - name: Upload downloaded books and the report
         if: always()
         uses: actions/upload-artifact@v4
@@ -52,12 +71,17 @@ jobs:
           path: ${{ env.SOURCES_DOWNLOAD_DIR }}
           if-no-files-found: ignore
           retention-days: 90
-      - name: Open a pull request if the manifest changed
+      - name: Open a pull request if anything changed
         uses: peter-evans/create-pull-request@v7
         with:
-          add-paths: data/sources/manifest.csv
+          add-paths: |
+            data/sources/manifest.csv
+            data/sources/new_yields/*.csv
+            data/interim/climate_features.csv
+            data/processed.csv
+            data/DATA_VERSIONS.csv
           branch: dataops/source-update
           delete-branch: true
-          title: "DataOps: source books update (run ${{ github.run_number }})"
-          commit-message: "DataOps: update source manifest (run ${{ github.run_number }})"
+          title: "DataOps: new data (run ${{ github.run_number }})"
+          commit-message: "DataOps: new books, yield rows and climate seasons (run ${{ github.run_number }})"
           body-path: ${{ env.SOURCES_DOWNLOAD_DIR }}/report.md

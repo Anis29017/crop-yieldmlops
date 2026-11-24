@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 import mlflow
 import pandas as pd
 
+from src import data_version
 from src.drift import run_drift_check
 from src.prepare_data import FEATURES, TARGET
 from src.train import (
@@ -107,10 +108,12 @@ def retrain(
 
     mlflow.set_experiment(EXPERIMENT)
     model_candidates = candidates if candidates is not None else CANDIDATES
+    data_info = data_version.describe(data_path)
+    print(f"Data version {data_info['data_version']} ({data_info['rows']} rows), code {data_info['git_commit']}")
 
     best = None
     for name, cls, params in model_candidates:
-        model, m, run_id, uri = train_one(name, cls, params, train_df, val_df)
+        model, m, run_id, uri = train_one(name, cls, params, train_df, val_df, data_info, df)
         if best is None or m["val_score"] < best["metrics"]["val_score"]:
             best = {
                 "model": model,
@@ -146,6 +149,7 @@ def retrain(
         "params": best["params"],
         "previous_val_score": current_score,
         "new_val_score": new_score,
+        **data_version.summary_fields(data_info),
         **best["metrics"],
         **test_m,
     }

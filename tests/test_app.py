@@ -229,3 +229,14 @@ def test_root_redirects_to_docs():
     r = client.get("/", follow_redirects=False)
     assert r.status_code in (302, 307)
     assert r.headers["location"] == "/docs"
+
+
+@pytest.mark.skipif(not os.path.exists("models/best_run.json"), reason="run train.py first")
+def test_version_says_which_data_the_model_was_trained_on():
+    from src.data_version import describe
+
+    r = client.get("/version")
+    assert r.status_code == 200
+    body = r.json()
+    assert set(body) >= {"registered_version", "model_type", "data_version", "git_commit"}
+    assert body["data_version"] == describe()["data_version"]

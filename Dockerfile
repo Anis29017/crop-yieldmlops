@@ -39,6 +39,14 @@ RUN pip install -r requirements.txt
 COPY src/ src/
 COPY data/raw/Pakistan_Master_Yield_1981-2025.xlsx data/raw/district_name_table.csv data/raw/
 COPY data/interim/district_points.csv data/interim/climate_features.csv data/interim/soil_features.csv data/interim/
+# Rows from new books, added by the DataOps pipeline through reviewed pull requests.
+COPY data/sources/new_yields/ data/sources/new_yields/
+
+# The code version recorded with the model (src/data_version.py); the image has no git.
+# CI passes GITHUB_SHA; Render passes its environment variables, RENDER_GIT_COMMIT among them,
+# as build arguments. If neither is given, the model records "unknown".
+ARG GITHUB_SHA
+ARG RENDER_GIT_COMMIT
 
 # 3. Build the training table and train the model. Any missing input stops the build.
 RUN python -m src.build_yield_labels \
