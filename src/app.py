@@ -151,7 +151,8 @@ def version():
         raise HTTPException(status_code=503, detail=f"{path} not found: no trained model")
     with open(path) as f:
         run = json.load(f)
-    return {k: run.get(k) for k in VERSION_FIELDS}
+    # deploy_color: "blue" or "green" when run in the blue-green setup (deploy/blue-green), else null
+    return {"deploy_color": os.getenv("DEPLOY_COLOR"), **{k: run.get(k) for k in VERSION_FIELDS}}
 
 
 @app.post("/predict", response_model=YieldOutput)

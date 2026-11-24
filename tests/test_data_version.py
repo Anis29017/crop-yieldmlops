@@ -1,6 +1,5 @@
 """Tests for data versioning (src/data_version.py) on the real data/processed.csv."""
 
-import shutil
 from datetime import date
 
 import pandas as pd
@@ -9,11 +8,14 @@ from src import data_version as dv
 
 
 def test_same_data_same_version_any_line_endings(tmp_path):
-    unix = tmp_path / "processed.csv"
-    shutil.copyfile(dv.PROCESSED, unix)
-    windows = tmp_path / "processed_windows.csv"
-    windows.write_bytes(unix.read_bytes().replace(b"\n", b"\r\n"))
-    assert dv.describe(str(unix), [])["data_version"] == dv.describe(str(windows), [])["data_version"]
+    # the checked-out file can already have Windows line endings (git on Windows), so start from LF
+    with open(dv.PROCESSED, "rb") as f:
+        lf = f.read().replace(b"\r\n", b"\n")
+    unix, windows = tmp_path / "processed.csv", tmp_path / "processed_windows.csv"
+    unix.write_bytes(lf)
+    windows.write_bytes(lf.replace(b"\n", b"\r\n"))
+    versions = {dv.describe(str(p), [])["data_version"] for p in (unix, windows, dv.PROCESSED)}
+    assert len(versions) == 1
 
 
 def test_any_change_gives_a_new_version(tmp_path):
