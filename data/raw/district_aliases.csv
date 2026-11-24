@@ -1,0 +1,46 @@
+source,book_province,book_name,province,district,how
+mnfsr,Punjab,D.G. Khan,Punjab,Dera Ghazi Khan,spelling
+mnfsr,Punjab,M. Garh,Punjab,Muzaffargarh,spelling
+mnfsr,Punjab,M.B. Din,Punjab,Mandi Bahauddin,spelling
+mnfsr,Punjab,Muree,Punjab,Murree,spelling
+mnfsr,Punjab,Rahimyar Khan,Punjab,Rahim Yar Khan,spelling
+mnfsr,Punjab,Islamabad,Islamabad,Islamabad,listed under Punjab in the book; separate province in our data
+mnfsr,Sindh,Kambar Shahdat Kot,Sindh,Kambar Shahdadkot,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Sindh,N. Feroze,Sindh,Naushahro Feroze,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Sindh,Shaheed Benazir Abad,Sindh,Shaheed Benazirabad,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Sindh,Kambar Shahdat,Sindh,Kambar Shahdadkot,name cut short in CAP 2023-24 (end of the name printed on its own line)
+mnfsr,Sindh,Shaheed Benazir,Sindh,Shaheed Benazirabad,name cut short in CAP 2023-24 (end of the name printed on its own line)
+mnfsr,Sindh,T.M.Khan,Sindh,Tando Muhammad Khan,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Bajour,Khyber Pakhtunkhwa,Bajaur Agency,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Bunir,Khyber Pakhtunkhwa,Buner,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Charsada,Khyber Pakhtunkhwa,Charsadda,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,D.Ikhan,Khyber Pakhtunkhwa,Dera Ismail Khan,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Dir Lower,Khyber Pakhtunkhwa,Lower Dir,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Dir Upper,Khyber Pakhtunkhwa,Upper Dir,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Khyber,Khyber Pakhtunkhwa,Khyber Agency,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Kurram,Khyber Pakhtunkhwa,Kurram Agency,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Muhmand,Khyber Pakhtunkhwa,Mohmand Agency,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,N. Waziristan,Khyber Pakhtunkhwa,North Waziristan,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Oriakzai,Khyber Pakhtunkhwa,Orakzai Agency,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,S. Waziristan,Khyber Pakhtunkhwa,South Waziristan,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,SD Bannu,Khyber Pakhtunkhwa,FR Bannu,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,SD D.I. Khan,Khyber Pakhtunkhwa,FR Dera Ismail Khan,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,SD Kohat,Khyber Pakhtunkhwa,FR Kohat,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Khyber Pakhtunkhwa,Sawabi,Khyber Pakhtunkhwa,Swabi,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Balochistan,Dera Bughti,Balochistan,Dera Bugti,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Balochistan,K. Abdullah,Balochistan,Killa Abdullah,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Balochistan,Musa Khail,Balochistan,Musakhel,matched to M1 rows of CAP 2024-25 by area and production
+mnfsr,Balochistan,Naushki,Balochistan,Nushki,spelling (all values zero in CAP 2024-25)
+mnfsr,Balochistan,Panjgoor,Balochistan,Panjgur,matched to M1 rows of CAP 2024-25 by area and production
+punjab_crs,Punjab,D.G. Khan,Punjab,Dera Ghazi Khan,short form
+punjab_crs,Punjab,M.B.Din,Punjab,Mandi Bahauddin,short form
+punjab_crs,Punjab,Muzzafargargh,Punjab,Muzaffargarh,spelling in the book
+punjab_crs,Punjab,T.T. Singh,Punjab,Toba Tek Singh,short form
+punjab_crs,Punjab,R.Y. Khan,Punjab,Rahim Yar Khan,short form
+punjab_crs,Punjab,Muree,Punjab,Murree,spelling in the book
+punjab_crs,Punjab,Wazieabad,Punjab,Wazirabad,spelling in the book (Rabi 2024-25)
+punjab_crs,Punjab,Islamabad,Islamabad,Islamabad,listed with Punjab in the book; Islamabad is its own unit in our data
+sindh_bos,Sindh,Kamber-Shahdadkot,Sindh,Kambar Shahdadkot,spelling in Sindh Statistics
+sindh_bos,Sindh,S. Benazirabad,Sindh,Shaheed Benazirabad,short form
+sindh_bos,Sindh,Tando M. Khan,Sindh,Tando Muhammad Khan,short form
+sindh_bos,Sindh,Umerkot,Sindh,Umarkot,spelling in Sindh Statistics
