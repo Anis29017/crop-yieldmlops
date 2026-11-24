@@ -1,0 +1,42 @@
+# Blue-green deployment of the crop yield API (see deploy/blue-green/README.md).
+#
+#   router :8080  -> the live colour (named in state/active)
+#   blue   :8001  -> image crop-yield:${BLUE_TAG}   (default v2)
+#   green  :8002  -> image crop-yield:${GREEN_TAG}  (default v3)
+#
+# Build the tags first, from the project folder:  docker build -t crop-yield:<tag> .
+# For a new release, give the IDLE colour the new tag on the command line, e.g.
+#   BLUE_TAG=v4 docker compose -f deploy/blue-green/docker-compose.yml up -d blue
+# (or change the default after ":-" below, so the next "up" keeps it).
+services:
+  blue:
+    image: crop-yield:${BLUE_TAG:-v2}
+    environment:
+      DEPLOY_COLOR: blue
+    ports:
+      - "8001:8000"
+
+  green:
+    image: crop-yield:${GREEN_TAG:-v3}
+    environment:
+      DEPLOY_COLOR: green
+    ports:
+      - "8002:8000"
+
+  router:
+    # any image built from a commit that has src/router.py (the newest tag is fine)
+    image: crop-yield:${ROUTER_TAG:-v3}
+    command: ["uvicorn", "src.router:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      BLUE_URL: http://blue:8000
+      GREEN_URL: http://green:8000
+      ACTIVE_FILE: /state/active
+    volumes:
+      - ./state:/state
+    ports:
+      - "8080:8000"
+    depends_on:
+      blue:
+        condition: service_healthy
+      green:
+        condition: service_healthy
