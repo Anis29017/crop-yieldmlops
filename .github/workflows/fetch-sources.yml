@@ -1,0 +1,63 @@
+name: Fetch source data
+
+# DataOps: check the official source pages for new yield books.
+# - Monthly, and on demand from the Actions tab ("Run workflow").
+# - First run: tick "init" to record every book listed today as known (no downloads).
+# - When new books are found: they are downloaded, checked, read into one Excel file per book
+#   (src/dataops/read_books.py), uploaded as an artifact, and a pull request updates
+#   data/sources/manifest.csv for a person to review (its text lists every check of every book).
+on:
+  schedule:
+    - cron: "0 3 1 * *"   # 03:00 UTC on the 1st of every month
+  workflow_dispatch:
+    inputs:
+      init:
+        description: "First run: record all currently listed books as known, download nothing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    env:
+      SOURCES_DOWNLOAD_DIR: /tmp/crop-yield-sources
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install what the fetcher and the book readers need (versions from requirements.txt)
+        run: |
+          sudo apt-get update && sudo apt-get install -y tesseract-ocr
+          for p in requests pandas openpyxl pdfplumber pytesseract; do pip install "$(grep "^$p==" requirements.txt)"; done
+      - name: Check the source pages and download new books
+        run: |
+          if [ "${{ inputs.init }}" = "true" ]; then
+            python -m src.dataops.fetch --init
+          else
+            python -m src.dataops.fetch
+          fi
+      - name: Read the new books into Excel files
+        if: ${{ !inputs.init }}
+        run: python -m src.dataops.read_books "$SOURCES_DOWNLOAD_DIR"
+      - name: Upload downloaded books and the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-books-${{ github.run_number }}
+          path: ${{ env.SOURCES_DOWNLOAD_DIR }}
+          if-no-files-found: ignore
+          retention-days: 90
+      - name: Open a pull request if the manifest changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          add-paths: data/sources/manifest.csv
+          branch: dataops/source-update
+          delete-branch: true
+          title: "DataOps: source books update (run ${{ github.run_number }})"
+          commit-message: "DataOps: update source manifest (run ${{ github.run_number }})"
+          body-path: ${{ env.SOURCES_DOWNLOAD_DIR }}/report.md
