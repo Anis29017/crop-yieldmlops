@@ -11,7 +11,6 @@ How to check, redeploy and roll back the deployed service.
 | Built from | `Dockerfile` in this repository, branch `main` |
 | Deploys | Automatically when `main` changes (Render: **Settings → Auto-Deploy**) |
 | Build time | About 4 minutes (dependencies + training the model inside the build) |
-| Who can deploy / roll back on Render | Only the workspace owner (Anis): Render's free Hobby workspace allows a single member. Everyone else redeploys by merging to `main`, and can always run any version locally (section 3) |
 
 The free service sleeps after 15 minutes without traffic and takes about a minute to wake.
 Open `/health` a few minutes before any demo or grading.
@@ -23,7 +22,6 @@ Open `/health` a few minutes before any demo or grading.
 | `GET /health` | Liveness: returns `{"status": "ok"}`. Render and the Docker healthcheck use it |
 | `POST /predict` | Yield prediction (t/ha) for one district, crop and year |
 | `GET /stats` | Request count, average / p95 / max latency per endpoint, model prediction time (resets on restart) |
-| `GET /version` | Which model is serving and which data version and code commit it was trained on (see `data/DATA_VERSIONS.csv`) |
 | `GET /docs` | Interactive API docs (`/` redirects here) |
 
 ## Check that the service works
@@ -42,12 +40,9 @@ curl -X POST $URL/predict -H "Content-Type: application/json" -d '{
   "prev_yield": 3.764, "prev2_yield": 3.659, "prev3_yield": 3.276}'
 
 curl $URL/stats
-
-curl $URL/version
 ```
 
-Expected: `{"status":"ok"}`, a `predicted_yield_t_ha` of about 3.65, `/stats` counting the requests,
-and `/version` showing a `data_version` that is the last line of `data/DATA_VERSIONS.csv`.
+Expected: `{"status":"ok"}`, a `predicted_yield_t_ha` of about 3.65, and `/stats` counting the requests.
 Every request is also logged with its latency: Render → **Logs**.
 
 ## Redeploy
@@ -60,7 +55,7 @@ Deploy latest commit**. If a build behaves oddly, use **Clear build cache & depl
 
 ## Roll back
 
-### 1. On Render (fastest: the service is broken now; workspace owner only)
+### 1. On Render (fastest: the service is broken now)
 
 1. Render → service → **Deploys** (the deploy history; older dashboards call it **Events**).
 2. Find the last deploy that worked and click **Rollback**.
@@ -80,36 +75,17 @@ git push            # through a pull request if main is protected
 
 Render then deploys the reverted code automatically.
 
-### 3. A previous Docker image tag (locally, anyone)
+### 3. A previous Docker image tag (locally)
 
-Every version is built with its own tag, so you can switch back to an older one at any time.
-Example with two real versions: `v1` = before the `/` redirect (commit `e30a07e`), `v2` = current `main`.
+Every release is built with a version tag, so an older version can be run at any time:
 
 ```bash
-# build both tags (a few minutes each)
-git checkout main && git pull
-docker build -t crop-yield:v2 .
-git checkout e30a07e
-docker build -t crop-yield:v1 .
-git checkout main
-docker images crop-yield            # lists v1 and v2
-
-# run the current version
-docker run -d --name api -p 8000:8000 crop-yield:v2
-# http://localhost:8000/  -> docs page
-
-# roll back to the previous tag
-docker rm -f api
-docker run -d --name api -p 8000:8000 crop-yield:v1
-# http://localhost:8000/  -> "Not Found" (old version), /health still ok
-
-# roll forward again
-docker rm -f api
-docker run -d --name api -p 8000:8000 crop-yield:v2
+docker images crop-yield                    # list the versions you have
+docker run -p 8000:8000 crop-yield:v1       # run an older version
 ```
 
-Any commit from Milestone 2 on contains the Dockerfile, so any of them can be rebuilt this way:
-`git checkout <commit>` then `docker build -t crop-yield:<tag> .`
+To recreate an older version from git: `git checkout <commit-or-tag>` then
+`docker build -t crop-yield:<tag> .` (any commit that contains the Dockerfile, i.e. from Milestone 2 on).
 
 ## When something goes wrong
 
