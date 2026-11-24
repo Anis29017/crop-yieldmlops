@@ -7,6 +7,7 @@ latency (visible in `docker logs`). Counters live in memory and reset when the
 app restarts.
 """
 
+import json
 import logging
 import os
 import pickle
@@ -136,6 +137,21 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+VERSION_FIELDS = ["registered_version", "model_type", "trained_at", "data_version", "data_rows",
+                  "data_newest_year", "data_inputs_sha256", "git_commit", "val_score", "test_score"]
+
+
+@app.get("/version")
+def version():
+    """Which model is serving, and which data version and code it was trained on (models/best_run.json)."""
+    path = os.path.join(os.path.dirname(MODEL_PATH) or ".", "best_run.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=503, detail=f"{path} not found: no trained model")
+    with open(path) as f:
+        run = json.load(f)
+    return {k: run.get(k) for k in VERSION_FIELDS}
 
 
 @app.post("/predict", response_model=YieldOutput)

@@ -1,0 +1,2 @@
+date,data_version,rows,first_year,newest_wheat,newest_rice,newest_cotton,newest_sugarcane,new_book_files,inputs_sha256,reason
+2026-11-24,a1b9813dc42f,10672,1984,2025,2024,2024,2024,0,a0165589afa0,"M1 data: hand-checked yield workbook 1981-2025, NASA POWER + CHIRPS climate 1981-2025, SoilGrids soil"

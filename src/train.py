@@ -12,6 +12,9 @@
   (RMSE for that crop / mean yield of that crop).
 - Saves the best model as models/model_v<N>_<type>.pkl (N = MLflow registry
   version) plus models/model.pkl (the copy the API loads), and registers it.
+- Data version: every run logs which exact data it was trained on (src/data_version.py):
+  the data version, the git commit, the row count and the dataset itself; best_run.json
+  keeps them too, so the deployed model can say which data it came from.
 - Latency: every run also logs how long it takes to predict - one row at a time
   (what the API does per request) and per 1,000 rows - plus the training time,
   so models can be compared on speed as well as accuracy. Speed is reported,
@@ -37,6 +40,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from xgboost import XGBRegressor
 
+from src import data_version
 from src.model import RecentYieldRatioRegressor, recent_average
 from src.prepare_data import CROPS, FEATURES, PROVINCES, TARGET
 
@@ -228,12 +232,14 @@ BASELINES = {
 }
 
 
-def log_baselines(val, test):
+def log_baselines(val, test, data_info=None, data=None):
     """Naive forecasts the model must beat. Returns {name: val_score}."""
     scores = {}
     for name, forecast in BASELINES.items():
         with mlflow.start_run(run_name=name):
             mlflow.log_param("model_type", name)
+            if data_info:
+                data_version.log_to_mlflow(data_info, data, TARGET)
             m = metrics(val[TARGET], forecast(val), val["crop"])
             m.update(metrics(test[TARGET], forecast(test), test["crop"], prefix="test"))
             m.update(predict_latency(forecast, val))
@@ -245,7 +251,7 @@ def log_baselines(val, test):
     return scores
 
 
-def train_one(name, cls, params, train, val):
+def train_one(name, cls, params, train, val, data_info=None, data=None):
     extra = {"random_state": 42}
     if name == "lightgbm":
         extra["verbose"] = -1
@@ -256,6 +262,8 @@ def train_one(name, cls, params, train, val):
         mlflow.log_param("model_type", name)
         mlflow.log_param("target", "log(yield / mean of previous 3 years)")
         mlflow.log_params(params)
+        if data_info:
+            data_version.log_to_mlflow(data_info, data, TARGET)
         start = time.perf_counter()
         model.fit(train[FEATURES], train[TARGET])
         fit_seconds = time.perf_counter() - start
@@ -283,11 +291,13 @@ def train(data_path=DATA_PATH, candidates=CANDIDATES):
         f"test {len(test_df)} ({TEST_START}-{TEST_END}, held out)"
     )
     mlflow.set_experiment(EXPERIMENT)
+    data_info = data_version.describe(data_path)
+    print(f"Data version {data_info['data_version']} ({data_info['rows']} rows), code {data_info['git_commit']}")
 
-    baselines = log_baselines(val_df, test_df)
+    baselines = log_baselines(val_df, test_df, data_info, df)
     best = None
     for name, cls, params in candidates:
-        model, m, run_id, uri = train_one(name, cls, params, train_df, val_df)
+        model, m, run_id, uri = train_one(name, cls, params, train_df, val_df, data_info, df)
         if best is None or m["val_score"] < best["metrics"]["val_score"]:
             best = {
                 "model": model,
@@ -335,6 +345,8 @@ def train(data_path=DATA_PATH, candidates=CANDIDATES):
         < baselines[best_baseline]["val_score"],
         "beats_baseline_on_test": test_m["test_score"]
         < baselines[best_baseline]["test_score"],
+        "trained_at": pd.Timestamp.now(tz="UTC").isoformat(timespec="seconds"),
+        **data_version.summary_fields(data_info),
     }
     with open(BEST_RUN_PATH, "w") as f:
         json.dump(summary, f, indent=2, default=str)

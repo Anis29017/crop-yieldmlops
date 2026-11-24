@@ -219,13 +219,13 @@ def write_excel(result, out_path):
         {"item": "lines skipped (see Check - skipped lines)", "value": len(result["skipped"])},
     ]
     with pd.ExcelWriter(out_path) as xl:
-        keep[COLUMNS].sort_values(["province", "crop", "district"]).to_excel(xl, "All Data", index=False)
-        pd.DataFrame(summary).to_excel(xl, "Summary", index=False)
-        pd.DataFrame(result["totals"]).to_excel(xl, "Check - province totals", index=False)
-        pd.DataFrame(result["comparison"]).to_excel(xl, "Check - vs our data", index=False)
+        keep[COLUMNS].sort_values(["province", "crop", "district"]).to_excel(xl, sheet_name="All Data", index=False)
+        pd.DataFrame(summary).to_excel(xl, sheet_name="Summary", index=False)
+        pd.DataFrame(result["totals"]).to_excel(xl, sheet_name="Check - province totals", index=False)
+        pd.DataFrame(result["comparison"]).to_excel(xl, sheet_name="Check - vs our data", index=False)
         pd.DataFrame(result["unknown_names"], columns=["province", "district", "book_name"]).to_excel(
-            xl, "Check - unknown names", index=False)
-        pd.DataFrame(result["skipped"]).to_excel(xl, "Check - skipped lines", index=False)
+            xl, sheet_name="Check - unknown names", index=False)
+        pd.DataFrame(result["skipped"]).to_excel(xl, sheet_name="Check - skipped lines", index=False)
     return keep
 
 

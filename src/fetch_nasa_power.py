@@ -53,12 +53,12 @@ def parse_power_json(payload):
     return df.reset_index()
 
 
-def fetch_point(lat, lon, session=None):
+def fetch_point(lat, lon, session=None, start=START, end=END):
     """Request one point, retrying with growing waits on errors or rate limits."""
     session = session or requests.Session()
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            r = session.get(API_URL, params=build_params(lat, lon), timeout=180)
+            r = session.get(API_URL, params=build_params(lat, lon, start, end), timeout=180)
             if r.status_code == 429:
                 raise requests.HTTPError("rate limited (429)")
             r.raise_for_status()

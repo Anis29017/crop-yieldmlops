@@ -23,6 +23,7 @@ Open `/health` a few minutes before any demo or grading.
 | `GET /health` | Liveness: returns `{"status": "ok"}`. Render and the Docker healthcheck use it |
 | `POST /predict` | Yield prediction (t/ha) for one district, crop and year |
 | `GET /stats` | Request count, average / p95 / max latency per endpoint, model prediction time (resets on restart) |
+| `GET /version` | Which model is serving and which data version and code commit it was trained on (see `data/DATA_VERSIONS.csv`) |
 | `GET /docs` | Interactive API docs (`/` redirects here) |
 
 ## Check that the service works
@@ -41,9 +42,12 @@ curl -X POST $URL/predict -H "Content-Type: application/json" -d '{
   "prev_yield": 3.764, "prev2_yield": 3.659, "prev3_yield": 3.276}'
 
 curl $URL/stats
+
+curl $URL/version
 ```
 
-Expected: `{"status":"ok"}`, a `predicted_yield_t_ha` of about 3.65, and `/stats` counting the requests.
+Expected: `{"status":"ok"}`, a `predicted_yield_t_ha` of about 3.65, `/stats` counting the requests,
+and `/version` showing a `data_version` that is the last line of `data/DATA_VERSIONS.csv`.
 Every request is also logged with its latency: Render → **Logs**.
 
 ## Redeploy

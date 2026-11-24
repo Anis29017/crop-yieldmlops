@@ -19,3 +19,11 @@ def test_report_gets_the_reading_table(tmp_path):
     read_books.main([str(tmp_path)])
     assert "No downloaded books to read" in (tmp_path / "report.md").read_text()
     assert (tmp_path / "reading.md").exists()
+
+
+def test_a_book_that_was_not_read_gets_no_rows_file(tmp_path):
+    (tmp_path / "mnfsr").mkdir()
+    (tmp_path / "mnfsr" / "broken.pdf").write_bytes(b"not a pdf")
+    accept = tmp_path / "accepted"
+    read_books.read_folder(str(tmp_path), str(accept))
+    assert not accept.exists() or not list(accept.iterdir())

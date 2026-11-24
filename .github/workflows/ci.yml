@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image
-        run: docker build -t crop-yield:${{ github.sha }} .
+        run: docker build --build-arg GITHUB_SHA=${{ github.sha }} -t crop-yield:${{ github.sha }} .
       - name: Start the container
         run: docker run -d --name api -p 8000:8000 crop-yield:${{ github.sha }}
       - name: Wait until Docker reports it healthy
@@ -78,6 +78,8 @@ jobs:
                  "prev_yield": 3.764, "prev2_yield": 3.659, "prev3_yield": 3.276}'
           echo
           curl -fsS http://localhost:8000/stats
+          echo
+          curl -fsS http://localhost:8000/version
           echo
       - name: Container logs
         if: always()
