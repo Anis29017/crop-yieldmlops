@@ -6,7 +6,7 @@
 | Anis Imran | 29017 |
 | Saadan Ashraf | 29223 |
 
-## Milestone 1 task table
+## Task table
 
 | Task | Owner | Status |
 |---|---|---|
